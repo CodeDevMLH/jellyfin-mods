@@ -100,14 +100,14 @@ body:not(:has(#loginPage:not(.hide))) .skinHeader {
 div.mainDrawer {background-color: rgba(0,0,0,0.6) !important;}
 ```
 
-### Hide the "Trailers" tab from movie libraries:
+### Hide the "Trailers" tab from movie libraries: 
 
-*Note: This mod currently also hides the "Upcoming" tab from TV show libraries. Please submit a PR if you find a way to hide only the "Trailers" tab.
+Thanks to #64
 
 ```css
-/*Hide the "Trailers" tab in Movies and the "Upcoming" tab in TV Shows*/
-.emby-tab-button[data-index="2"] {
-  display: none !important;
+/*Hide the "Trailers" tab in Movies*/
+.mainDrawer:has(.navMenuOption-selected[href^="#/movies.html"]) + .skinHeader .emby-tab-button[data-index="2"] {
+display: none !important;
 }
 ```
 
@@ -459,13 +459,13 @@ Allows for the use of a specific account's favorites to promote content, as well
 In `main.jellyfin.bundle.js` simply search for:
 
 ```js
-enableBackdrops:function(){return _}
+value:function(e){return void 0!==e?this.set("enableBackdrops",e.toString(),!1):(0,i.G4)(this.get("enableBackdrops",!1),!1)}},
 ```
 
 And replace it with: 
 
 ```js
-enableBackdrops:function(){return E}
+value:function(e){return void 0!==e?this.set("enableBackdrops",e.toString(),!1):(0,i.G4)(this.get("enableBackdrops",!0),!0)}},
 ```
 
 Save the file and reload the cache on your clients to see your changes.
@@ -480,19 +480,20 @@ Save the file and reload the cache on your clients to see your changes.
 In `main.jellyfin.bundle.js` simply search for:
 
 ```js
-enableThemeSongs:function(){return j}
+"enableThemeSongs", !1), !1);
 ```
 
 And replace it with:
 
 ```js
-enableThemeSongs:function(){return P}
+"enableThemeSongs", !0), !0);
 ```
+
+explanation !1 is NOT CHECKED and !0 is NOT UNCHECKED (i could have just removed a ! apparently but i like the way it works with insanity)
 
 Save the file and reload the cache on your clients to see your changes.
 
 
-*** If you cannot find it (because of regex in search like in nano) try searching for `enableThemeSongs:function`. This should give you the ability to find the string above ***
 
 Pro tip: Use the theme songs plugin to grab multiple theme songs for TV shows in one go (https://github.com/danieladov/jellyfin-plugin-themesongs), or manually add a theme .mp3 at the root of each TV show folder (i.e. `/tv/breaking bad/theme.mp3`). This mod also works for movies of course, but you will have to manually grab each theme song as the mentioned plugin does not work with movies.
 
